@@ -11,6 +11,7 @@ function SubtaskList({ subtasks, onAdd, onUpdate, onToggle, onDelete }) {
     const subtask = createSubtask(title)
 
     if (!subtask) {
+      setTitle('')
       return
     }
 

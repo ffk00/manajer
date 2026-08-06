@@ -10,6 +10,7 @@ function QuickAdd({ onAddTask }) {
     const task = createTask(title)
 
     if (!task) {
+      setTitle('')
       return
     }
 
