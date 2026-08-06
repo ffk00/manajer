@@ -1,8 +1,14 @@
 import TaskItem from './TaskItem'
 
-function TaskList({ tasks, selectedTaskId, onSelect, onToggleComplete }) {
+function TaskList({
+  tasks,
+  selectedTaskId,
+  onSelect,
+  onToggleComplete,
+  emptyMessage = 'No tasks yet.',
+}) {
   if (tasks.length === 0) {
-    return <p>No tasks yet.</p>
+    return <p>{emptyMessage}</p>
   }
 
   return (
