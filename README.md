@@ -1,5 +1,6 @@
 # Task Manager
-Bro
+pnpm install
+pnpm run dev
 
 # React + Vite
 
