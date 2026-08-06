@@ -1,6 +1,10 @@
 import { parseDateParts } from './date.js'
 
 export const TASK_STORAGE_KEY = 'j-manager.tasks'
+export const DEADLINE_NOTIFICATION_STORAGE_KEY =
+  'j-manager.deadlineNotifications'
+
+const MAX_STORED_NOTIFICATION_KEYS = 500
 
 const VALID_STATUSES = new Set([
   'todo',
@@ -128,6 +132,57 @@ export function saveTasks(tasks, storage = getBrowserStorage()) {
 
   try {
     storage.setItem(TASK_STORAGE_KEY, JSON.stringify(tasks))
+    return true
+  } catch {
+    return false
+  }
+}
+
+function normalizeNotificationKeys(keys) {
+  if (!Array.isArray(keys)) {
+    return []
+  }
+
+  const uniqueKeys = new Set(
+    keys.filter((key) => typeof key === 'string' && key.length > 0),
+  )
+
+  return [...uniqueKeys].slice(-MAX_STORED_NOTIFICATION_KEYS)
+}
+
+export function loadDeadlineNotificationKeys(storage = getBrowserStorage()) {
+  if (!storage) {
+    return []
+  }
+
+  try {
+    const serializedKeys = storage.getItem(
+      DEADLINE_NOTIFICATION_STORAGE_KEY,
+    )
+
+    if (!serializedKeys) {
+      return []
+    }
+
+    return normalizeNotificationKeys(JSON.parse(serializedKeys))
+  } catch {
+    return []
+  }
+}
+
+export function saveDeadlineNotificationKeys(
+  keys,
+  storage = getBrowserStorage(),
+) {
+  if (!storage) {
+    return false
+  }
+
+  try {
+    storage.setItem(
+      DEADLINE_NOTIFICATION_STORAGE_KEY,
+      JSON.stringify(normalizeNotificationKeys(keys)),
+    )
     return true
   } catch {
     return false

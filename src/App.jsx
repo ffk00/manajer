@@ -4,6 +4,8 @@ import SearchBar from './components/SearchBar'
 import Sidebar from './components/Sidebar'
 import TaskEditor from './components/TaskEditor'
 import TaskList from './components/TaskList'
+import Toast from './components/Toast'
+import { useDeadlineNotifications } from './hooks/useDeadlineNotifications'
 import { initialTaskState, taskReducer } from './state/taskReducer'
 import { filterTasks } from './utils/taskFilters'
 import { loadTasks, saveTasks } from './utils/storage'
@@ -24,6 +26,7 @@ function App() {
   )
   const [activeFilter, setActiveFilter] = useState('all')
   const [searchQuery, setSearchQuery] = useState('')
+  const { toast, dismissToast } = useDeadlineNotifications(state.tasks)
 
   useEffect(() => {
     saveTasks(state.tasks)
@@ -116,49 +119,53 @@ function App() {
     activeFilter !== 'all' || searchQuery.trim() !== ''
 
   return (
-    <main className="app-shell">
-      <Sidebar
-        activeFilter={activeFilter}
-        onFilterChange={setActiveFilter}
-      />
-
-      <section className="task-workspace" aria-label="Task workspace">
-        <header className="workspace-toolbar">
-          <QuickAdd onAddTask={handleAddTask} />
-          <SearchBar query={searchQuery} onQueryChange={setSearchQuery} />
-        </header>
-
-        <TaskList
-          tasks={visibleTasks}
-          selectedTaskId={state.selectedTaskId}
-          onSelect={handleSelectTask}
-          onToggleComplete={handleToggleComplete}
-          emptyMessage={
-            hasActiveSearchOrFilter ? 'No matching tasks.' : 'No tasks yet.'
-          }
+    <>
+      <main className="app-shell">
+        <Sidebar
+          activeFilter={activeFilter}
+          onFilterChange={setActiveFilter}
         />
-      </section>
 
-      {selectedTask ? (
-        <TaskEditor
-          key={selectedTask.id}
-          task={selectedTask}
-          onSave={handleUpdateTask}
-          onDelete={handleDeleteTask}
-          onStatusChange={(taskId, status) =>
-            handleUpdateTask(taskId, { status })
-          }
-          onAddSubtask={handleAddSubtask}
-          onUpdateSubtask={handleUpdateSubtask}
-          onToggleSubtask={handleToggleSubtask}
-          onDeleteSubtask={handleDeleteSubtask}
-        />
-      ) : (
-        <aside className="task-editor task-editor--empty">
-          <p>Select a task to view its details.</p>
-        </aside>
-      )}
-    </main>
+        <section className="task-workspace" aria-label="Task workspace">
+          <header className="workspace-toolbar">
+            <QuickAdd onAddTask={handleAddTask} />
+            <SearchBar query={searchQuery} onQueryChange={setSearchQuery} />
+          </header>
+
+          <TaskList
+            tasks={visibleTasks}
+            selectedTaskId={state.selectedTaskId}
+            onSelect={handleSelectTask}
+            onToggleComplete={handleToggleComplete}
+            emptyMessage={
+              hasActiveSearchOrFilter ? 'No matching tasks.' : 'No tasks yet.'
+            }
+          />
+        </section>
+
+        {selectedTask ? (
+          <TaskEditor
+            key={selectedTask.id}
+            task={selectedTask}
+            onSave={handleUpdateTask}
+            onDelete={handleDeleteTask}
+            onStatusChange={(taskId, status) =>
+              handleUpdateTask(taskId, { status })
+            }
+            onAddSubtask={handleAddSubtask}
+            onUpdateSubtask={handleUpdateSubtask}
+            onToggleSubtask={handleToggleSubtask}
+            onDeleteSubtask={handleDeleteSubtask}
+          />
+        ) : (
+          <aside className="task-editor task-editor--empty">
+            <p>Select a task to view its details.</p>
+          </aside>
+        )}
+      </main>
+
+      <Toast toast={toast} onClose={dismissToast} />
+    </>
   )
 }
 
