@@ -53,6 +53,46 @@ function App() {
     })
   }
 
+  function handleAddSubtask(taskId, subtask) {
+    dispatch({
+      type: 'subtask/added',
+      payload: {
+        taskId,
+        subtask,
+        updatedAt: new Date().toISOString(),
+      },
+    })
+  }
+
+  function handleUpdateSubtask(taskId, subtaskId, changes) {
+    dispatch({
+      type: 'subtask/updated',
+      payload: {
+        taskId,
+        subtaskId,
+        changes,
+        updatedAt: new Date().toISOString(),
+      },
+    })
+  }
+
+  function handleToggleSubtask(taskId, subtask) {
+    handleUpdateSubtask(taskId, subtask.id, {
+      completed: !subtask.completed,
+    })
+  }
+
+  function handleDeleteSubtask(taskId, subtaskId) {
+    dispatch({
+      type: 'subtask/deleted',
+      payload: {
+        taskId,
+        subtaskId,
+        updatedAt: new Date().toISOString(),
+      },
+    })
+  }
+
   const selectedTask =
     state.tasks.find((task) => task.id === state.selectedTaskId) ?? null
   const visibleTasks = filterTasks(state.tasks, activeFilter, searchQuery)
@@ -85,10 +125,17 @@ function App() {
 
       {selectedTask ? (
         <TaskEditor
-          key={`${selectedTask.id}-${selectedTask.updatedAt}`}
+          key={selectedTask.id}
           task={selectedTask}
           onSave={handleUpdateTask}
           onDelete={handleDeleteTask}
+          onStatusChange={(taskId, status) =>
+            handleUpdateTask(taskId, { status })
+          }
+          onAddSubtask={handleAddSubtask}
+          onUpdateSubtask={handleUpdateSubtask}
+          onToggleSubtask={handleToggleSubtask}
+          onDeleteSubtask={handleDeleteSubtask}
         />
       ) : (
         <p>Select a task to view its details.</p>

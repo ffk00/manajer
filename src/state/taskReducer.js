@@ -38,6 +38,54 @@ export function taskReducer(state, action) {
             : state.selectedTaskId,
       }
 
+    case 'subtask/added':
+      return {
+        ...state,
+        tasks: state.tasks.map((task) =>
+          task.id === action.payload.taskId
+            ? {
+                ...task,
+                subtasks: [...task.subtasks, action.payload.subtask],
+                updatedAt: action.payload.updatedAt,
+              }
+            : task,
+        ),
+      }
+
+    case 'subtask/updated':
+      return {
+        ...state,
+        tasks: state.tasks.map((task) =>
+          task.id === action.payload.taskId
+            ? {
+                ...task,
+                subtasks: task.subtasks.map((subtask) =>
+                  subtask.id === action.payload.subtaskId
+                    ? { ...subtask, ...action.payload.changes }
+                    : subtask,
+                ),
+                updatedAt: action.payload.updatedAt,
+              }
+            : task,
+        ),
+      }
+
+    case 'subtask/deleted':
+      return {
+        ...state,
+        tasks: state.tasks.map((task) =>
+          task.id === action.payload.taskId
+            ? {
+                ...task,
+                subtasks: task.subtasks.filter(
+                  (subtask) => subtask.id !== action.payload.subtaskId,
+                ),
+                updatedAt: action.payload.updatedAt,
+              }
+            : task,
+        ),
+      }
+
     default:
       return state
   }

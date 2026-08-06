@@ -1,15 +1,24 @@
 import { useState } from 'react'
+import SubtaskList from './SubtaskList'
 
 function createDraft(task) {
   return {
     title: task.title,
     description: task.description,
-    status: task.status,
     deadline: task.deadline ?? '',
   }
 }
 
-function TaskEditor({ task, onSave, onDelete }) {
+function TaskEditor({
+  task,
+  onSave,
+  onDelete,
+  onStatusChange,
+  onAddSubtask,
+  onUpdateSubtask,
+  onToggleSubtask,
+  onDeleteSubtask,
+}) {
   const [draft, setDraft] = useState(() => createDraft(task))
 
   function updateField(event) {
@@ -67,8 +76,8 @@ function TaskEditor({ task, onSave, onDelete }) {
         <select
           id="task-status"
           name="status"
-          value={draft.status}
-          onChange={updateField}
+          value={task.status}
+          onChange={(event) => onStatusChange(task.id, event.target.value)}
         >
           <option value="todo">To-do</option>
           <option value="in_progress">In Progress</option>
@@ -93,6 +102,16 @@ function TaskEditor({ task, onSave, onDelete }) {
           Delete
         </button>
       </form>
+
+      <SubtaskList
+        subtasks={task.subtasks}
+        onAdd={(subtask) => onAddSubtask(task.id, subtask)}
+        onUpdate={(subtaskId, changes) =>
+          onUpdateSubtask(task.id, subtaskId, changes)
+        }
+        onToggle={(subtask) => onToggleSubtask(task.id, subtask)}
+        onDelete={(subtaskId) => onDeleteSubtask(task.id, subtaskId)}
+      />
     </aside>
   )
 }
