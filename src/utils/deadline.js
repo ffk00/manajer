@@ -1,3 +1,5 @@
+import { parseDateParts } from './date.js'
+
 const MILLISECONDS_PER_DAY = 24 * 60 * 60 * 1000
 
 // deadline indicator logic is:
@@ -5,26 +7,6 @@ const MILLISECONDS_PER_DAY = 24 * 60 * 60 * 1000
 // <== APPROACHING_DAYS is approaching
 // >== APPROACHING_DAYS is upcoming
 export const APPROACHING_DAYS = 3
-
-function parseDateParts(dateString) {
-  const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(dateString)
-
-  if (!match) {
-    return null
-  }
-
-  const year = Number(match[1])
-  const month = Number(match[2])
-  const day = Number(match[3])
-  const date = new Date(Date.UTC(year, month - 1, day))
-
-  const isValid =
-    date.getUTCFullYear() === year &&
-    date.getUTCMonth() === month - 1 &&
-    date.getUTCDate() === day
-
-  return isValid ? { year, month, day } : null
-}
 
 function toDayNumber({ year, month, day }) {
   return Date.UTC(year, month - 1, day) / MILLISECONDS_PER_DAY
