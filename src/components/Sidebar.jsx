@@ -8,7 +8,9 @@ const statusFilters = [
 
 function Sidebar({ activeFilter, onFilterChange }) {
   return (
-    <aside>
+    <aside className="sidebar">
+      <h1>Task Manager</h1>
+
       <nav aria-label="Task status filters">
         <h2>Tasks</h2>
 

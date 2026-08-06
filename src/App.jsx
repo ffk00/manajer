@@ -100,17 +100,17 @@ function App() {
     activeFilter !== 'all' || searchQuery.trim() !== ''
 
   return (
-    <main>
-      <h1>Task Manager</h1>
-
+    <main className="app-shell">
       <Sidebar
         activeFilter={activeFilter}
         onFilterChange={setActiveFilter}
       />
 
-      <section aria-label="Task workspace">
-        <QuickAdd onAddTask={handleAddTask} />
-        <SearchBar query={searchQuery} onQueryChange={setSearchQuery} />
+      <section className="task-workspace" aria-label="Task workspace">
+        <header className="workspace-toolbar">
+          <QuickAdd onAddTask={handleAddTask} />
+          <SearchBar query={searchQuery} onQueryChange={setSearchQuery} />
+        </header>
 
         <TaskList
           tasks={visibleTasks}
@@ -138,7 +138,9 @@ function App() {
           onDeleteSubtask={handleDeleteSubtask}
         />
       ) : (
-        <p>Select a task to view its details.</p>
+        <aside className="task-editor task-editor--empty">
+          <p>Select a task to view its details.</p>
+        </aside>
       )}
     </main>
   )

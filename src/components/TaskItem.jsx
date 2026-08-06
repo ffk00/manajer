@@ -1,6 +1,6 @@
 function TaskItem({ task, isSelected, onSelect, onToggleComplete }) {
   return (
-    <li>
+    <li className={isSelected ? 'task-item task-item--selected' : 'task-item'}>
       <input
         type="checkbox"
         checked={task.status === 'completed'}
@@ -11,6 +11,7 @@ function TaskItem({ task, isSelected, onSelect, onToggleComplete }) {
       />
 
       <button
+        className="task-item__title"
         type="button"
         onClick={() => onSelect(task.id)}
         aria-pressed={isSelected}
@@ -18,7 +19,7 @@ function TaskItem({ task, isSelected, onSelect, onToggleComplete }) {
         {task.title}
       </button>
 
-      <span>{task.status}</span>
+      <span className="task-item__status">{task.status}</span>
     </li>
   )
 }

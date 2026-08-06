@@ -23,7 +23,7 @@ function SubtaskItem({ subtask, onUpdate, onToggle, onDelete }) {
   }
 
   return (
-    <li>
+    <li className="subtask-item">
       <input
         type="checkbox"
         checked={subtask.completed}
@@ -33,32 +33,44 @@ function SubtaskItem({ subtask, onUpdate, onToggle, onDelete }) {
         }`}
       />
 
-      {isEditing ? (
-        <form onSubmit={handleSubmit}>
-          <label htmlFor={`subtask-${subtask.id}`}>Subtask title</label>
-          <input
-            id={`subtask-${subtask.id}`}
-            type="text"
-            value={title}
-            onChange={(event) => setTitle(event.target.value)}
-          />
-          <button type="submit">Save</button>
-          <button type="button" onClick={handleCancel}>
-            Cancel
-          </button>
-        </form>
-      ) : (
-        <>
-          <span>{subtask.title}</span>
-          <button type="button" onClick={() => setIsEditing(true)}>
-            Edit
-          </button>
-        </>
-      )}
+      <div className="subtask-item__content">
+        {isEditing ? (
+          <form className="subtask-edit-form" onSubmit={handleSubmit}>
+            <label className="visually-hidden" htmlFor={`subtask-${subtask.id}`}>
+              Subtask title
+            </label>
+            <input
+              id={`subtask-${subtask.id}`}
+              type="text"
+              value={title}
+              onChange={(event) => setTitle(event.target.value)}
+            />
 
-      <button type="button" onClick={() => onDelete(subtask.id)}>
-        Delete
-      </button>
+            <div className="subtask-actions">
+              <button type="submit">Save</button>
+              <button type="button" onClick={handleCancel}>
+                Cancel
+              </button>
+              <button type="button" onClick={() => onDelete(subtask.id)}>
+                Delete
+              </button>
+            </div>
+          </form>
+        ) : (
+          <div className="subtask-summary">
+            <span>{subtask.title}</span>
+
+            <div className="subtask-actions">
+              <button type="button" onClick={() => setIsEditing(true)}>
+                Edit
+              </button>
+              <button type="button" onClick={() => onDelete(subtask.id)}>
+                Delete
+              </button>
+            </div>
+          </div>
+        )}
+      </div>
     </li>
   )
 }

@@ -1,6 +1,6 @@
 function SearchBar({ query, onQueryChange }) {
   return (
-    <div role="search">
+    <div className="search-bar" role="search">
       <label htmlFor="task-search">Search tasks</label>
       <input
         id="task-search"

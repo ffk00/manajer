@@ -19,7 +19,7 @@ function SubtaskList({ subtasks, onAdd, onUpdate, onToggle, onDelete }) {
   }
 
   return (
-    <section aria-labelledby="subtasks-heading">
+    <section className="subtask-list" aria-labelledby="subtasks-heading">
       <h3 id="subtasks-heading">Subtasks</h3>
 
       <form onSubmit={handleSubmit}>

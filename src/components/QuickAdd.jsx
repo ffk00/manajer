@@ -18,7 +18,7 @@ function QuickAdd({ onAddTask }) {
   }
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form className="quick-add" onSubmit={handleSubmit}>
       <label htmlFor="quick-add">Add a task</label>
 
       <input

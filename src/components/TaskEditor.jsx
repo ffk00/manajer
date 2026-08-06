@@ -51,7 +51,7 @@ function TaskEditor({
   }
 
   return (
-    <aside aria-label="Task details">
+    <aside className="task-editor" aria-label="Task details">
       <h2>Task details</h2>
 
       <form onSubmit={handleSubmit}>
@@ -94,13 +94,19 @@ function TaskEditor({
           onChange={updateField}
         />
 
-        <button type="submit">Save</button>
-        <button type="button" onClick={handleCancel}>
-          Cancel
-        </button>
-        <button type="button" onClick={() => onDelete(task.id)}>
-          Delete
-        </button>
+        <div className="editor-actions">
+          <button type="submit">Save</button>
+          <button type="button" onClick={handleCancel}>
+            Cancel
+          </button>
+          <button
+            className="danger-button"
+            type="button"
+            onClick={() => onDelete(task.id)}
+          >
+            Delete
+          </button>
+        </div>
       </form>
 
       <SubtaskList
