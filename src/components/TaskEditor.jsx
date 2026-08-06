@@ -1,0 +1,100 @@
+import { useState } from 'react'
+
+function createDraft(task) {
+  return {
+    title: task.title,
+    description: task.description,
+    status: task.status,
+    deadline: task.deadline ?? '',
+  }
+}
+
+function TaskEditor({ task, onSave, onDelete }) {
+  const [draft, setDraft] = useState(() => createDraft(task))
+
+  function updateField(event) {
+    const { name, value } = event.target
+
+    setDraft((currentDraft) => ({
+      ...currentDraft,
+      [name]: value,
+    }))
+  }
+
+  function handleSubmit(event) {
+    event.preventDefault()
+
+    const trimmedTitle = draft.title.trim()
+
+    if (!trimmedTitle) {
+      return
+    }
+
+    onSave(task.id, {
+      ...draft,
+      title: trimmedTitle,
+      deadline: draft.deadline || null,
+    })
+  }
+
+  function handleCancel() {
+    setDraft(createDraft(task))
+  }
+
+  return (
+    <aside aria-label="Task details">
+      <h2>Task details</h2>
+
+      <form onSubmit={handleSubmit}>
+        <label htmlFor="task-title">Title</label>
+        <input
+          id="task-title"
+          name="title"
+          type="text"
+          value={draft.title}
+          onChange={updateField}
+        />
+
+        <label htmlFor="task-description">Description</label>
+        <textarea
+          id="task-description"
+          name="description"
+          value={draft.description}
+          onChange={updateField}
+        />
+
+        <label htmlFor="task-status">Status</label>
+        <select
+          id="task-status"
+          name="status"
+          value={draft.status}
+          onChange={updateField}
+        >
+          <option value="todo">To-do</option>
+          <option value="in_progress">In Progress</option>
+          <option value="completed">Completed</option>
+          <option value="canceled">Canceled</option>
+        </select>
+
+        <label htmlFor="task-deadline">Deadline</label>
+        <input
+          id="task-deadline"
+          name="deadline"
+          type="date"
+          value={draft.deadline}
+          onChange={updateField}
+        />
+
+        <button type="submit">Save</button>
+        <button type="button" onClick={handleCancel}>
+          Cancel
+        </button>
+        <button type="button" onClick={() => onDelete(task.id)}>
+          Delete
+        </button>
+      </form>
+    </aside>
+  )
+}
+
+export default TaskEditor
