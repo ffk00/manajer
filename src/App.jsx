@@ -66,7 +66,7 @@ function App() {
 
       {selectedTask ? (
         <TaskEditor
-          key={selectedTask.id}
+          key={`${selectedTask.id}-${selectedTask.updatedAt}`}          
           task={selectedTask}
           onSave={handleUpdateTask}
           onDelete={handleDeleteTask}
