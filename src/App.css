@@ -232,6 +232,21 @@ select:focus-visible {
   color: var(--muted);
 }
 
+.task-item__deadline {
+  font-size: 0.75rem;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+.task-item__deadline[data-deadline-state='overdue'] {
+  color: var(--danger);
+}
+
+.task-item__deadline[data-deadline-state='today'],
+.task-item__deadline[data-deadline-state='approaching'] {
+  color: #a65309;
+}
+
 input[type='checkbox'] {
   width: 18px;
   height: 18px;

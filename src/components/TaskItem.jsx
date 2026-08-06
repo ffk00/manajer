@@ -1,4 +1,8 @@
-function TaskItem({ task, isSelected, onSelect, onToggleComplete }) {
+import { getDeadlineInfo, getDeadlineLabel } from '../utils/deadline'
+
+function TaskItem({ task, today, isSelected, onSelect, onToggleComplete }) {
+  const deadlineInfo = getDeadlineInfo(task, today)
+
   return (
     <li className={isSelected ? 'task-item task-item--selected' : 'task-item'}>
       <input
@@ -20,6 +24,15 @@ function TaskItem({ task, isSelected, onSelect, onToggleComplete }) {
       </button>
 
       <span className="task-item__status">{task.status}</span>
+
+      {deadlineInfo && (
+        <span
+          className="task-item__deadline"
+          data-deadline-state={deadlineInfo.state}
+        >
+          {getDeadlineLabel(deadlineInfo, task.deadline)}
+        </span>
+      )}
     </li>
   )
 }

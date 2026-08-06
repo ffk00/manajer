@@ -11,12 +11,15 @@ function TaskList({
     return <p>{emptyMessage}</p>
   }
 
+  const today = new Date()
+
   return (
     <ul className="task-list">
       {tasks.map((task) => (
         <TaskItem
           key={task.id}
           task={task}
+          today={today}
           isSelected={task.id === selectedTaskId}
           onSelect={onSelect}
           onToggleComplete={onToggleComplete}
