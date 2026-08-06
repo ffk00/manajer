@@ -1,4 +1,4 @@
-import { useReducer, useState } from 'react'
+import { useEffect, useReducer, useState } from 'react'
 import QuickAdd from './components/QuickAdd'
 import SearchBar from './components/SearchBar'
 import Sidebar from './components/Sidebar'
@@ -6,12 +6,28 @@ import TaskEditor from './components/TaskEditor'
 import TaskList from './components/TaskList'
 import { initialTaskState, taskReducer } from './state/taskReducer'
 import { filterTasks } from './utils/taskFilters'
+import { loadTasks, saveTasks } from './utils/storage'
 import './App.css'
 
+function initializeTaskState(initialState) {
+  return {
+    ...initialState,
+    tasks: loadTasks(),
+  }
+}
+
 function App() {
-  const [state, dispatch] = useReducer(taskReducer, initialTaskState)
+  const [state, dispatch] = useReducer(
+    taskReducer,
+    initialTaskState,
+    initializeTaskState,
+  )
   const [activeFilter, setActiveFilter] = useState('all')
   const [searchQuery, setSearchQuery] = useState('')
+
+  useEffect(() => {
+    saveTasks(state.tasks)
+  }, [state.tasks])
 
   function handleAddTask(task) {
     dispatch({
