@@ -28,6 +28,32 @@ export function taskReducer(state, action) {
         ),
       }
 
+    case 'task/reordered': {
+      const { fromIndex, toIndex } = action.payload
+      const lastTaskIndex = state.tasks.length - 1
+
+      if (
+        !Number.isInteger(fromIndex) ||
+        !Number.isInteger(toIndex) ||
+        fromIndex < 0 ||
+        toIndex < 0 ||
+        fromIndex > lastTaskIndex ||
+        toIndex > lastTaskIndex ||
+        fromIndex === toIndex
+      ) {
+        return state
+      }
+
+      const tasks = [...state.tasks]
+      const [movedTask] = tasks.splice(fromIndex, 1)
+      tasks.splice(toIndex, 0, movedTask)
+
+      return {
+        ...state,
+        tasks,
+      }
+    }
+
     case 'task/deleted':
       return {
         ...state,

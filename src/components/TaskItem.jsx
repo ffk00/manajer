@@ -1,10 +1,48 @@
+import { useSortable } from '@dnd-kit/react/sortable'
 import { getDeadlineInfo, getDeadlineLabel } from '../utils/deadline'
 
-function TaskItem({ task, today, isSelected, onSelect, onToggleComplete }) {
+function TaskItem({
+  task,
+  index,
+  today,
+  isSelected,
+  canReorder,
+  onSelect,
+  onToggleComplete,
+}) {
   const deadlineInfo = getDeadlineInfo(task, today)
+  const { ref, handleRef, isDragging } = useSortable({
+    id: task.id,
+    index,
+    disabled: !canReorder,
+  })
+  const classNames = ['task-item']
+
+  if (isSelected) {
+    classNames.push('task-item--selected')
+  }
+
+  if (isDragging) {
+    classNames.push('task-item--dragging')
+  }
 
   return (
-    <li className={isSelected ? 'task-item task-item--selected' : 'task-item'}>
+    <li ref={ref} className={classNames.join(' ')}>
+      <button
+        ref={handleRef}
+        className="task-item__drag-handle"
+        type="button"
+        disabled={!canReorder}
+        aria-label={`Reorder ${task.title}`}
+        title={
+          canReorder
+            ? 'Drag to reorder'
+            : 'Clear the search and select All to reorder tasks'
+        }
+      >
+        <span aria-hidden="true">⠿</span>
+      </button>
+
       <input
         type="checkbox"
         checked={task.status === 'completed'}

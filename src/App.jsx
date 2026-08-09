@@ -72,6 +72,13 @@ function App() {
     })
   }
 
+  function handleReorderTask(fromIndex, toIndex) {
+    dispatch({
+      type: 'task/reordered',
+      payload: { fromIndex, toIndex },
+    })
+  }
+
   function handleAddSubtask(taskId, subtask) {
     dispatch({
       type: 'subtask/added',
@@ -137,6 +144,8 @@ function App() {
             selectedTaskId={state.selectedTaskId}
             onSelect={handleSelectTask}
             onToggleComplete={handleToggleComplete}
+            onReorder={handleReorderTask}
+            canReorder={!hasActiveSearchOrFilter}
             emptyMessage={
               hasActiveSearchOrFilter ? 'No matching tasks.' : 'No tasks yet.'
             }

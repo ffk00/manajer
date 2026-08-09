@@ -164,6 +164,35 @@ select:focus-visible {
   background: var(--panel);
 }
 
+.task-item__drag-handle {
+  flex: 0 0 auto;
+  width: 28px;
+  height: 32px;
+  padding: 0;
+  border: 0;
+  color: var(--muted);
+  background: transparent;
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
+}
+
+.task-item__drag-handle:active {
+  cursor: grabbing;
+}
+
+.task-item__drag-handle:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.task-item--dragging {
+  position: relative;
+  z-index: 1;
+  opacity: 0.7;
+  box-shadow: 0 8px 24px rgb(0 0 0 / 16%);
+}
+
 .subtask-item {
   display: grid;
   grid-template-columns: auto minmax(0, 1fr);
