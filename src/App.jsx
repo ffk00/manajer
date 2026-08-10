@@ -1,4 +1,4 @@
-import { useEffect, useReducer, useState } from 'react'
+import { useState } from 'react'
 import { fetchDummyTodos } from './api/dummyJson'
 import QuickAdd from './components/QuickAdd'
 import SearchBar from './components/SearchBar'
@@ -8,25 +8,28 @@ import TaskImport from './components/TaskImport'
 import TaskList from './components/TaskList'
 import Toast from './components/Toast'
 import { useDeadlineNotifications } from './hooks/useDeadlineNotifications'
-import { initialTaskState, taskReducer } from './state/taskReducer'
+import { useTaskManager } from './hooks/useTaskManager'
 import { toTasks } from './utils/dummyTodoAdapter'
 import { filterTasks } from './utils/taskFilters'
-import { loadTasks, saveTasks } from './utils/storage'
 import './App.css'
 
-function initializeTaskState(initialState) {
-  return {
-    ...initialState,
-    tasks: loadTasks(),
-  }
-}
-
 function App() {
-  const [state, dispatch] = useReducer(
-    taskReducer,
-    initialTaskState,
-    initializeTaskState,
-  )
+  const {
+    tasks,
+    selectedTask,
+    selectedTaskId,
+    addTask,
+    importTasks,
+    selectTask,
+    updateTask,
+    deleteTask,
+    toggleTaskComplete,
+    reorderTask,
+    addSubtask,
+    updateSubtask,
+    toggleSubtask,
+    deleteSubtask,
+  } = useTaskManager()
   const [activeFilter, setActiveFilter] = useState('all')
   const [searchQuery, setSearchQuery] = useState('')
   const [taskImport, setTaskImport] = useState({
@@ -34,58 +37,7 @@ function App() {
     message: '',
     messageType: 'success',
   })
-  const { toast, dismissToast } = useDeadlineNotifications(state.tasks)
-
-  useEffect(() => {
-    saveTasks(state.tasks)
-  }, [state.tasks])
-
-  function handleAddTask(task) {
-    dispatch({
-      type: 'task/added',
-      payload: task,
-    })
-  }
-
-  function handleSelectTask(taskId) {
-    dispatch({
-      type: 'task/selected',
-      payload: taskId,
-    })
-  }
-
-  function handleUpdateTask(taskId, changes) {
-    dispatch({
-      type: 'task/updated',
-      payload: {
-        id: taskId,
-        changes: {
-          ...changes,
-          updatedAt: new Date().toISOString(),
-        },
-      },
-    })
-  }
-
-  function handleDeleteTask(taskId) {
-    dispatch({
-      type: 'task/deleted',
-      payload: taskId,
-    })
-  }
-
-  function handleToggleComplete(task) {
-    handleUpdateTask(task.id, {
-      status: task.status === 'completed' ? 'todo' : 'completed',
-    })
-  }
-
-  function handleReorderTask(fromIndex, toIndex) {
-    dispatch({
-      type: 'task/reordered',
-      payload: { fromIndex, toIndex },
-    })
-  }
+  const { toast, dismissToast } = useDeadlineNotifications(tasks)
 
   async function handleImportTasks() {
     setTaskImport({
@@ -102,10 +54,7 @@ function App() {
         throw new Error('DummyJSON did not return any valid tasks.')
       }
 
-      dispatch({
-        type: 'tasks/imported',
-        payload: importedTasks,
-      })
+      importTasks(importedTasks)
 
       setTaskImport({
         isImporting: false,
@@ -124,49 +73,7 @@ function App() {
     }
   }
 
-  function handleAddSubtask(taskId, subtask) {
-    dispatch({
-      type: 'subtask/added',
-      payload: {
-        taskId,
-        subtask,
-        updatedAt: new Date().toISOString(),
-      },
-    })
-  }
-
-  function handleUpdateSubtask(taskId, subtaskId, changes) {
-    dispatch({
-      type: 'subtask/updated',
-      payload: {
-        taskId,
-        subtaskId,
-        changes,
-        updatedAt: new Date().toISOString(),
-      },
-    })
-  }
-
-  function handleToggleSubtask(taskId, subtask) {
-    handleUpdateSubtask(taskId, subtask.id, {
-      completed: !subtask.completed,
-    })
-  }
-
-  function handleDeleteSubtask(taskId, subtaskId) {
-    dispatch({
-      type: 'subtask/deleted',
-      payload: {
-        taskId,
-        subtaskId,
-        updatedAt: new Date().toISOString(),
-      },
-    })
-  }
-
-  const selectedTask =
-    state.tasks.find((task) => task.id === state.selectedTaskId) ?? null
-  const visibleTasks = filterTasks(state.tasks, activeFilter, searchQuery)
+  const visibleTasks = filterTasks(tasks, activeFilter, searchQuery)
   const hasActiveSearchOrFilter =
     activeFilter !== 'all' || searchQuery.trim() !== ''
 
@@ -180,7 +87,7 @@ function App() {
 
         <section className="task-workspace" aria-label="Task workspace">
           <header className="workspace-toolbar">
-            <QuickAdd onAddTask={handleAddTask} />
+            <QuickAdd onAddTask={addTask} />
             <SearchBar query={searchQuery} onQueryChange={setSearchQuery} />
           </header>
 
@@ -193,10 +100,10 @@ function App() {
 
           <TaskList
             tasks={visibleTasks}
-            selectedTaskId={state.selectedTaskId}
-            onSelect={handleSelectTask}
-            onToggleComplete={handleToggleComplete}
-            onReorder={handleReorderTask}
+            selectedTaskId={selectedTaskId}
+            onSelect={selectTask}
+            onToggleComplete={toggleTaskComplete}
+            onReorder={reorderTask}
             canReorder={!hasActiveSearchOrFilter}
             emptyMessage={
               hasActiveSearchOrFilter ? 'No matching tasks.' : 'No tasks yet.'
@@ -208,15 +115,15 @@ function App() {
           <TaskEditor
             key={selectedTask.id}
             task={selectedTask}
-            onSave={handleUpdateTask}
-            onDelete={handleDeleteTask}
+            onSave={updateTask}
+            onDelete={deleteTask}
             onStatusChange={(taskId, status) =>
-              handleUpdateTask(taskId, { status })
+              updateTask(taskId, { status })
             }
-            onAddSubtask={handleAddSubtask}
-            onUpdateSubtask={handleUpdateSubtask}
-            onToggleSubtask={handleToggleSubtask}
-            onDeleteSubtask={handleDeleteSubtask}
+            onAddSubtask={addSubtask}
+            onUpdateSubtask={updateSubtask}
+            onToggleSubtask={toggleSubtask}
+            onDeleteSubtask={deleteSubtask}
           />
         ) : (
           <aside className="task-editor task-editor--empty">
