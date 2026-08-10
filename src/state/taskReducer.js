@@ -1,3 +1,8 @@
+/**
+ * @deprecated The application now uses `tasksSlice.js` and Redux Toolkit.
+ * This reducer is retained as an educational example of the equivalent
+ * immutable update logic written with React's `useReducer` pattern.
+ */
 export const initialTaskState = {
   tasks: [],
   selectedTaskId: null,

@@ -1,64 +1,49 @@
-import { useEffect, useReducer } from 'react'
-import { initialTaskState, taskReducer } from '../state/taskReducer'
-import { loadTasks, saveTasks } from '../utils/storage'
-
-function initializeTaskState(initialState) {
-  return {
-    ...initialState,
-    tasks: loadTasks(),
-  }
-}
+import { useDispatch, useSelector } from 'react-redux'
+import {
+  selectSelectedTaskId,
+  selectTasks,
+  subtaskAdded,
+  subtaskDeleted,
+  subtaskUpdated,
+  taskAdded,
+  taskDeleted,
+  taskReordered,
+  taskSelected,
+  taskUpdated,
+  tasksImported,
+} from '../state/tasksSlice'
 
 export function useTaskManager() {
-  const [state, dispatch] = useReducer(
-    taskReducer,
-    initialTaskState,
-    initializeTaskState,
-  )
-
-  useEffect(() => {
-    saveTasks(state.tasks)
-  }, [state.tasks])
+  const dispatch = useDispatch()
+  const tasks = useSelector(selectTasks)
+  const selectedTaskId = useSelector(selectSelectedTaskId)
 
   function addTask(task) {
-    dispatch({
-      type: 'task/added',
-      payload: task,
-    })
+    dispatch(taskAdded(task))
   }
 
-  function importTasks(tasks) {
-    dispatch({
-      type: 'tasks/imported',
-      payload: tasks,
-    })
+  function importTasks(importedTasks) {
+    dispatch(tasksImported(importedTasks))
   }
 
   function selectTask(taskId) {
-    dispatch({
-      type: 'task/selected',
-      payload: taskId,
-    })
+    dispatch(taskSelected(taskId))
   }
 
   function updateTask(taskId, changes) {
-    dispatch({
-      type: 'task/updated',
-      payload: {
+    dispatch(
+      taskUpdated({
         id: taskId,
         changes: {
           ...changes,
           updatedAt: new Date().toISOString(),
         },
-      },
-    })
+      }),
+    )
   }
 
   function deleteTask(taskId) {
-    dispatch({
-      type: 'task/deleted',
-      payload: taskId,
-    })
+    dispatch(taskDeleted(taskId))
   }
 
   function toggleTaskComplete(task) {
@@ -68,33 +53,28 @@ export function useTaskManager() {
   }
 
   function reorderTask(fromIndex, toIndex) {
-    dispatch({
-      type: 'task/reordered',
-      payload: { fromIndex, toIndex },
-    })
+    dispatch(taskReordered({ fromIndex, toIndex }))
   }
 
   function addSubtask(taskId, subtask) {
-    dispatch({
-      type: 'subtask/added',
-      payload: {
+    dispatch(
+      subtaskAdded({
         taskId,
         subtask,
         updatedAt: new Date().toISOString(),
-      },
-    })
+      }),
+    )
   }
 
   function updateSubtask(taskId, subtaskId, changes) {
-    dispatch({
-      type: 'subtask/updated',
-      payload: {
+    dispatch(
+      subtaskUpdated({
         taskId,
         subtaskId,
         changes,
         updatedAt: new Date().toISOString(),
-      },
-    })
+      }),
+    )
   }
 
   function toggleSubtask(taskId, subtask) {
@@ -104,23 +84,22 @@ export function useTaskManager() {
   }
 
   function deleteSubtask(taskId, subtaskId) {
-    dispatch({
-      type: 'subtask/deleted',
-      payload: {
+    dispatch(
+      subtaskDeleted({
         taskId,
         subtaskId,
         updatedAt: new Date().toISOString(),
-      },
-    })
+      }),
+    )
   }
 
   const selectedTask =
-    state.tasks.find((task) => task.id === state.selectedTaskId) ?? null
+    tasks.find((task) => task.id === selectedTaskId) ?? null
 
   return {
-    tasks: state.tasks,
+    tasks,
     selectedTask,
-    selectedTaskId: state.selectedTaskId,
+    selectedTaskId,
     addTask,
     importTasks,
     selectTask,

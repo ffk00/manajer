@@ -2,6 +2,15 @@
 pnpm install
 pnpm run dev
 
+## State management
+
+The running application uses Redux Toolkit:
+
+- `src/state/tasksSlice.js` contains the active task reducers and actions.
+- `src/state/store.js` configures the Redux store and local-storage persistence.
+- `src/state/taskReducer.js` is deprecated and retained only as an educational
+  comparison with the earlier `useReducer` implementation.
+
 # React + Vite
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
