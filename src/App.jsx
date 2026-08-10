@@ -1,5 +1,4 @@
 import { useState } from 'react'
-import { fetchDummyTodos } from './api/dummyJson'
 import QuickAdd from './components/QuickAdd'
 import SearchBar from './components/SearchBar'
 import Sidebar from './components/Sidebar'
@@ -8,8 +7,8 @@ import TaskImport from './components/TaskImport'
 import TaskList from './components/TaskList'
 import Toast from './components/Toast'
 import { useDeadlineNotifications } from './hooks/useDeadlineNotifications'
+import { useTaskImport } from './hooks/useTaskImport'
 import { useTaskManager } from './hooks/useTaskManager'
-import { toTasks } from './utils/dummyTodoAdapter'
 import { filterTasks } from './utils/taskFilters'
 import './App.css'
 
@@ -32,46 +31,12 @@ function App() {
   } = useTaskManager()
   const [activeFilter, setActiveFilter] = useState('all')
   const [searchQuery, setSearchQuery] = useState('')
-  const [taskImport, setTaskImport] = useState({
-    isImporting: false,
-    message: '',
-    messageType: 'success',
-  })
+  const {
+    status: importStatus,
+    message: importMessage,
+    importSampleTasks,
+  } = useTaskImport(importTasks)
   const { toast, dismissToast } = useDeadlineNotifications(tasks)
-
-  async function handleImportTasks() {
-    setTaskImport({
-      isImporting: true,
-      message: '',
-      messageType: 'success',
-    })
-
-    try {
-      const response = await fetchDummyTodos()
-      const importedTasks = toTasks(response)
-
-      if (importedTasks.length === 0) {
-        throw new Error('DummyJSON did not return any valid tasks.')
-      }
-
-      importTasks(importedTasks)
-
-      setTaskImport({
-        isImporting: false,
-        message: `${importedTasks.length} sample tasks imported.`,
-        messageType: 'success',
-      })
-    } catch (error) {
-      setTaskImport({
-        isImporting: false,
-        message:
-          error instanceof Error
-            ? error.message
-            : 'Could not import sample tasks.',
-        messageType: 'error',
-      })
-    }
-  }
 
   const visibleTasks = filterTasks(tasks, activeFilter, searchQuery)
   const hasActiveSearchOrFilter =
@@ -92,10 +57,9 @@ function App() {
           </header>
 
           <TaskImport
-            isImporting={taskImport.isImporting}
-            message={taskImport.message}
-            messageType={taskImport.messageType}
-            onImport={handleImportTasks}
+            status={importStatus}
+            message={importMessage}
+            onImport={importSampleTasks}
           />
 
           <TaskList
