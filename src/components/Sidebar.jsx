@@ -1,3 +1,5 @@
+import brandLogo from '../assets/brand_logo.png'
+
 const statusFilters = [
   { value: 'all', label: 'All' },
   { value: 'todo', label: 'To-do' },
@@ -9,7 +11,9 @@ const statusFilters = [
 function Sidebar({ activeFilter, onFilterChange }) {
   return (
     <aside className="sidebar">
-      <h1>Task Manager</h1>
+      <h1 className="sidebar__brand">
+        <img src={brandLogo} alt="J Manager" />
+      </h1>
 
       <nav aria-label="Task status filters">
         <h2>Tasks</h2>

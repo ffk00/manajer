@@ -44,9 +44,15 @@ p {
   margin-top: 0;
 }
 
-.sidebar h1 {
+.sidebar__brand {
   margin-bottom: 40px;
-  font-size: 1.3rem;
+}
+
+.sidebar__brand img {
+  display: block;
+  width: 100%;
+  max-width: 180px;
+  height: auto;
 }
 
 .sidebar h2,
