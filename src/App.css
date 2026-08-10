@@ -154,6 +154,28 @@ select:focus-visible {
   background: var(--accent);
 }
 
+.task-import {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.task-import button:disabled {
+  cursor: wait;
+  opacity: 0.65;
+}
+
+.task-import__message {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+.task-import__message--error {
+  color: var(--danger);
+}
+
 .task-item {
   display: flex;
   align-items: center;
@@ -399,6 +421,11 @@ input[type='checkbox'] {
 
   .workspace-toolbar {
     grid-template-columns: 1fr;
+  }
+
+  .task-import {
+    align-items: flex-start;
+    flex-direction: column;
   }
 
   .toast {

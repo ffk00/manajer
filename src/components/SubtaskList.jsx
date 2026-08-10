@@ -24,13 +24,12 @@ function SubtaskList({ subtasks, onAdd, onUpdate, onToggle, onDelete }) {
       <h3 id="subtasks-heading">Subtasks</h3>
 
       <form onSubmit={handleSubmit}>
-        <label htmlFor="new-subtask">Add a subtask</label>
         <input
           id="new-subtask"
           type="text"
           value={title}
           onChange={(event) => setTitle(event.target.value)}
-          placeholder="What is the next step?"
+          placeholder="What is the next subtask?"
         />
         <button type="submit">Add</button>
       </form>

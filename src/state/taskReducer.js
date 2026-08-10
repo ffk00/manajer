@@ -12,6 +12,27 @@ export function taskReducer(state, action) {
         selectedTaskId: action.payload.id,
       }
 
+    case 'tasks/imported': {
+      const existingTaskIds = new Set(state.tasks.map((task) => task.id))
+      const importedTasks = action.payload.filter((task) => {
+        if (existingTaskIds.has(task.id)) {
+          return false
+        }
+
+        existingTaskIds.add(task.id)
+        return true
+      })
+
+      if (importedTasks.length === 0) {
+        return state
+      }
+
+      return {
+        ...state,
+        tasks: [...state.tasks, ...importedTasks],
+      }
+    }
+
     case 'task/selected':
       return {
         ...state,
