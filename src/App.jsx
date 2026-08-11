@@ -17,17 +17,7 @@ function App() {
     tasks,
     selectedTask,
     selectedTaskId,
-    addTask,
-    importTasks,
-    selectTask,
-    updateTask,
-    deleteTask,
-    toggleTaskComplete,
-    reorderTask,
-    addSubtask,
-    updateSubtask,
-    toggleSubtask,
-    deleteSubtask,
+    actions,
   } = useTaskManager()
   const [activeFilter, setActiveFilter] = useState('all')
   const [searchQuery, setSearchQuery] = useState('')
@@ -35,7 +25,7 @@ function App() {
     status: importStatus,
     message: importMessage,
     importSampleTasks,
-  } = useTaskImport(importTasks)
+  } = useTaskImport(actions.importTasks)
   const { toast, dismissToast } = useDeadlineNotifications(tasks)
 
   const visibleTasks = filterTasks(tasks, activeFilter, searchQuery)
@@ -52,7 +42,7 @@ function App() {
 
         <section className="task-workspace" aria-label="Task workspace">
           <header className="workspace-toolbar">
-            <QuickAdd onAddTask={addTask} />
+            <QuickAdd onAddTask={actions.addTask} />
             <SearchBar query={searchQuery} onQueryChange={setSearchQuery} />
           </header>
 
@@ -65,9 +55,9 @@ function App() {
           <TaskList
             tasks={visibleTasks}
             selectedTaskId={selectedTaskId}
-            onSelect={selectTask}
-            onToggleComplete={toggleTaskComplete}
-            onReorder={reorderTask}
+            onSelect={actions.selectTask}
+            onToggleComplete={actions.toggleTaskComplete}
+            onReorder={actions.reorderTask}
             canReorder={!hasActiveSearchOrFilter}
             emptyMessage={
               hasActiveSearchOrFilter ? 'No matching tasks.' : 'No tasks yet.'
@@ -79,15 +69,15 @@ function App() {
           <TaskEditor
             key={selectedTask.id}
             task={selectedTask}
-            onSave={updateTask}
-            onDelete={deleteTask}
+            onSave={actions.updateTask}
+            onDelete={actions.deleteTask}
             onStatusChange={(taskId, status) =>
-              updateTask(taskId, { status })
+              actions.updateTask(taskId, { status })
             }
-            onAddSubtask={addSubtask}
-            onUpdateSubtask={updateSubtask}
-            onToggleSubtask={toggleSubtask}
-            onDeleteSubtask={deleteSubtask}
+            onAddSubtask={actions.addSubtask}
+            onUpdateSubtask={actions.updateSubtask}
+            onToggleSubtask={actions.toggleSubtask}
+            onDeleteSubtask={actions.deleteSubtask}
           />
         ) : (
           <aside className="task-editor task-editor--empty">
