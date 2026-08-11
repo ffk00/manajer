@@ -1,11 +1,12 @@
 import brandLogo from '../assets/brand_logo.png'
+import { CheckCircle2, Circle, Clock3, Inbox, XCircle } from 'lucide-react'
 
 const statusFilters = [
-  { value: 'all', label: 'All' },
-  { value: 'todo', label: 'To-do' },
-  { value: 'in_progress', label: 'In Progress' },
-  { value: 'completed', label: 'Completed' },
-  { value: 'canceled', label: 'Canceled' },
+  { value: 'all', label: 'All', icon: Inbox },
+  { value: 'todo', label: 'To-do', icon: Circle },
+  { value: 'in_progress', label: 'In Progress', icon: Clock3 },
+  { value: 'completed', label: 'Completed', icon: CheckCircle2 },
+  { value: 'canceled', label: 'Canceled', icon: XCircle },
 ]
 
 function Sidebar({ activeFilter, onFilterChange }) {
@@ -19,14 +20,16 @@ function Sidebar({ activeFilter, onFilterChange }) {
         <h2>Tasks</h2>
 
         <ul>
-          {statusFilters.map((filter) => (
-            <li key={filter.value}>
+          {statusFilters.map(({ value, label, icon: Icon }) => (
+            <li key={value}>
               <button
+                className={`sidebar__filter sidebar__filter--${value}`}
                 type="button"
-                onClick={() => onFilterChange(filter.value)}
-                aria-pressed={activeFilter === filter.value}
+                onClick={() => onFilterChange(value)}
+                aria-pressed={activeFilter === value}
               >
-                {filter.label}
+                <Icon aria-hidden="true" size={17} strokeWidth={2} />
+                {label}
               </button>
             </li>
           ))}

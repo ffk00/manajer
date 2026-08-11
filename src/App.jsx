@@ -26,6 +26,11 @@ function App() {
   const hasActiveSearchOrFilter =
     activeFilter !== 'all' || searchQuery.trim() !== ''
 
+  function clearFilters() {
+    setActiveFilter('all')
+    setSearchQuery('')
+  }
+
   return (
     <>
       <main className="app-shell">
@@ -53,9 +58,8 @@ function App() {
             onToggleComplete={actions.toggleTaskComplete}
             onReorder={actions.reorderTask}
             canReorder={!hasActiveSearchOrFilter}
-            emptyMessage={
-              hasActiveSearchOrFilter ? 'No matching tasks.' : 'No tasks yet.'
-            }
+            isFiltered={hasActiveSearchOrFilter}
+            onClearFilters={clearFilters}
           />
         </section>
 

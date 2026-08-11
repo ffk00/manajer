@@ -1,4 +1,5 @@
 import SubtaskList from './SubtaskList'
+import { Trash2 } from 'lucide-react'
 
 function EmptyEditorPanel() {
   return (
@@ -85,10 +86,11 @@ function TaskEditor({
 
         <div className="editor-actions">
           <button
-            className="danger-button"
+            className="danger-button button--danger"
             type="button"
             onClick={() => onDelete(task.id)}
           >
+            <Trash2 aria-hidden="true" size={17} />
             Delete
           </button>
         </div>

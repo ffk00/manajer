@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { Plus } from 'lucide-react'
 import { createSubtask } from '../utils/createSubtask'
 import SubtaskItem from './SubtaskItem'
 
@@ -31,7 +32,10 @@ function SubtaskList({ subtasks, onAdd, onUpdate, onToggle, onDelete }) {
           onChange={(event) => setTitle(event.target.value)}
           placeholder="What is the next subtask?"
         />
-        <button type="submit">Add</button>
+        <button className="button--primary" type="submit">
+          <Plus aria-hidden="true" size={17} />
+          Add
+        </button>
       </form>
 
       {subtasks.length === 0 ? (

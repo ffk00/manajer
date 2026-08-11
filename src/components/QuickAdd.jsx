@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { Plus } from 'lucide-react'
 import { createTask } from '../utils/createTask'
 
 function QuickAdd({ onAddTask }) {
@@ -30,7 +31,10 @@ function QuickAdd({ onAddTask }) {
         placeholder="What needs to be done?"
       />
 
-      <button type="submit">Add</button>
+      <button type="submit">
+        <Plus aria-hidden="true" size={17} />
+        Add
+      </button>
     </form>
   )
 }

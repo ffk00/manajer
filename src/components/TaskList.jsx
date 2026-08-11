@@ -1,5 +1,6 @@
 import { DragDropProvider } from '@dnd-kit/react'
 import { isSortable } from '@dnd-kit/react/sortable'
+import EmptyState from './EmptyState'
 import TaskItem from './TaskItem'
 
 function TaskList({
@@ -9,10 +10,11 @@ function TaskList({
   onToggleComplete,
   onReorder,
   canReorder = true,
-  emptyMessage = 'No tasks yet.',
+  isFiltered = false,
+  onClearFilters,
 }) {
   if (tasks.length === 0) {
-    return <p>{emptyMessage}</p>
+    return <EmptyState isFiltered={isFiltered} onClearFilters={onClearFilters} />
   }
 
   const today = new Date()

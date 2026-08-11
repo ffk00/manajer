@@ -3,7 +3,8 @@ function TaskImport({ status, message, onImport }) {
 
   return (
     <section className="task-import" aria-label="Import sample tasks">
-      <button type="button" disabled={isImporting} onClick={onImport}>
+      <button className="button--primary" type="button" disabled={isImporting} onClick={onImport}>
+        <Download aria-hidden="true" size={17} />
         {isImporting ? 'Importing…' : 'Import sample tasks'}
       </button>
 
@@ -20,3 +21,4 @@ function TaskImport({ status, message, onImport }) {
 }
 
 export default TaskImport
+import { Download } from 'lucide-react'

@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { Check, Pencil, Trash2, X } from 'lucide-react'
 
 function SubtaskItem({ subtask, onUpdate, onToggle, onDelete }) {
   const [isEditing, setIsEditing] = useState(false)
@@ -47,11 +48,16 @@ function SubtaskItem({ subtask, onUpdate, onToggle, onDelete }) {
             />
 
             <div className="subtask-actions">
-              <button type="submit">Save</button>
+              <button className="button--primary" type="submit" aria-label="Save subtask">
+                <Check aria-hidden="true" size={16} />
+                Save
+              </button>
               <button type="button" onClick={handleCancel}>
+                <X aria-hidden="true" size={16} />
                 Cancel
               </button>
-              <button type="button" onClick={() => onDelete(subtask.id)}>
+              <button className="button--danger" type="button" onClick={() => onDelete(subtask.id)}>
+                <Trash2 aria-hidden="true" size={16} />
                 Delete
               </button>
             </div>
@@ -62,9 +68,11 @@ function SubtaskItem({ subtask, onUpdate, onToggle, onDelete }) {
 
             <div className="subtask-actions">
               <button type="button" onClick={() => setIsEditing(true)}>
+                <Pencil aria-hidden="true" size={16} />
                 Edit
               </button>
-              <button type="button" onClick={() => onDelete(subtask.id)}>
+              <button className="button--danger" type="button" onClick={() => onDelete(subtask.id)}>
+                <Trash2 aria-hidden="true" size={16} />
                 Delete
               </button>
             </div>

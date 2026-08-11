@@ -1,4 +1,5 @@
 import { useSortable } from '@dnd-kit/react/sortable'
+import { CalendarDays } from 'lucide-react'
 import { getDeadlineInfo, getDeadlineLabel } from '../utils/deadline'
 
 function TaskItem({
@@ -65,13 +66,16 @@ function TaskItem({
         {taskTitle}
       </button>
 
-      <span className="task-item__status">{task.status}</span>
+      <span className={`task-item__status task-item__status--${task.status}`}>
+        {task.status.replace('_', ' ')}
+      </span>
 
       {deadlineInfo && (
         <span
           className="task-item__deadline"
           data-deadline-state={deadlineInfo.state}
         >
+          <CalendarDays aria-hidden="true" size={14} />
           {getDeadlineLabel(deadlineInfo, task.deadline)}
         </span>
       )}
