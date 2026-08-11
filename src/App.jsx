@@ -65,25 +65,19 @@ function App() {
           />
         </section>
 
-        {selectedTask ? (
-          <TaskEditor
-            key={selectedTask.id}
-            task={selectedTask}
-            onSave={actions.updateTask}
-            onDelete={actions.deleteTask}
-            onStatusChange={(taskId, status) =>
-              actions.updateTask(taskId, { status })
-            }
-            onAddSubtask={actions.addSubtask}
-            onUpdateSubtask={actions.updateSubtask}
-            onToggleSubtask={actions.toggleSubtask}
-            onDeleteSubtask={actions.deleteSubtask}
-          />
-        ) : (
-          <aside className="task-editor task-editor--empty">
-            <p>Select a task to view its details.</p>
-          </aside>
-        )}
+        <TaskEditor
+          key={selectedTask?.id ?? 'empty'}
+          task={selectedTask}
+          onSave={actions.updateTask}
+          onDelete={actions.deleteTask}
+          onStatusChange={(taskId, status) =>
+            actions.updateTask(taskId, { status })
+          }
+          onAddSubtask={actions.addSubtask}
+          onUpdateSubtask={actions.updateSubtask}
+          onToggleSubtask={actions.toggleSubtask}
+          onDeleteSubtask={actions.deleteSubtask}
+        />
       </main>
 
       <Toast toast={toast} onClose={dismissToast} />

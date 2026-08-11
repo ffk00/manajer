@@ -9,7 +9,23 @@ function createDraft(task) {
   }
 }
 
-function TaskEditor({
+function EmptyEditorPanel() {
+  return (
+    <aside className="task-editor task-editor--empty">
+      <p>Select a task to view its details.</p>
+    </aside>
+  )
+}
+
+function TaskEditor({ task, ...props }) {
+  if (!task) {
+    return <EmptyEditorPanel />
+  }
+
+  return <TaskEditorForm task={task} {...props} />
+}
+
+function TaskEditorForm({
   task,
   onSave,
   onDelete,
