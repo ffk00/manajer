@@ -284,6 +284,10 @@ select:focus-visible {
   white-space: nowrap;
 }
 
+.task-item__title--untitled {
+  color: var(--muted);
+}
+
 .task-item__status {
   font-size: 0.75rem;
   color: var(--muted);
@@ -321,7 +325,7 @@ input[type='checkbox'] {
   text-align: center;
 }
 
-.task-editor > form {
+.task-editor__fields {
   display: grid;
   gap: 8px;
 }
@@ -338,12 +342,6 @@ input[type='checkbox'] {
   flex-wrap: wrap;
   gap: 8px;
   margin-top: 8px;
-}
-
-.editor-actions button:first-child {
-  color: white;
-  border-color: var(--accent);
-  background: var(--accent);
 }
 
 .editor-actions .danger-button {

@@ -70,7 +70,6 @@ function isValidTask(task) {
     typeof task.id === 'string' &&
     task.id.length > 0 &&
     typeof task.title === 'string' &&
-    task.title.trim().length > 0 &&
     typeof task.description === 'string' &&
     VALID_STATUSES.has(task.status) &&
     (task.deadline === null || parseDateParts(task.deadline) !== null) &&

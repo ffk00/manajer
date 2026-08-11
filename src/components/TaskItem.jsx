@@ -11,6 +11,8 @@ function TaskItem({
   onToggleComplete,
 }) {
   const deadlineInfo = getDeadlineInfo(task, today)
+  const isUntitled = task.title.trim().length === 0
+  const taskTitle = isUntitled ? 'Untitled' : task.title
   const { ref, handleRef, isDragging } = useSortable({
     id: task.id,
     index,
@@ -33,7 +35,7 @@ function TaskItem({
         className="task-item__drag-handle"
         type="button"
         disabled={!canReorder}
-        aria-label={`Reorder ${task.title}`}
+        aria-label={`Reorder ${taskTitle}`}
         title={
           canReorder
             ? 'Drag to reorder'
@@ -47,18 +49,20 @@ function TaskItem({
         type="checkbox"
         checked={task.status === 'completed'}
         onChange={() => onToggleComplete(task)}
-        aria-label={`Mark ${task.title} as ${
+        aria-label={`Mark ${taskTitle} as ${
           task.status === 'completed' ? 'to-do' : 'completed'
         }`}
       />
 
       <button
-        className="task-item__title"
+        className={`task-item__title${
+          isUntitled ? ' task-item__title--untitled' : ''
+        }`}
         type="button"
         onClick={() => onSelect(task.id)}
         aria-pressed={isSelected}
       >
-        {task.title}
+        {taskTitle}
       </button>
 
       <span className="task-item__status">{task.status}</span>

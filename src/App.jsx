@@ -13,12 +13,7 @@ import { filterTasks } from './utils/taskFilters'
 import './App.css'
 
 function App() {
-  const {
-    tasks,
-    selectedTask,
-    selectedTaskId,
-    actions,
-  } = useTaskManager()
+  const {tasks, selectedTask, selectedTaskId, actions} = useTaskManager()
   const [activeFilter, setActiveFilter] = useState('all')
   const [searchQuery, setSearchQuery] = useState('')
   const {
@@ -27,7 +22,6 @@ function App() {
     importSampleTasks,
   } = useTaskImport(actions.importTasks)
   const { toast, dismissToast } = useDeadlineNotifications(tasks)
-
   const visibleTasks = filterTasks(tasks, activeFilter, searchQuery)
   const hasActiveSearchOrFilter =
     activeFilter !== 'all' || searchQuery.trim() !== ''
@@ -66,13 +60,9 @@ function App() {
         </section>
 
         <TaskEditor
-          key={selectedTask?.id ?? 'empty'}
           task={selectedTask}
           onSave={actions.updateTask}
           onDelete={actions.deleteTask}
-          onStatusChange={(taskId, status) =>
-            actions.updateTask(taskId, { status })
-          }
           onAddSubtask={actions.addSubtask}
           onUpdateSubtask={actions.updateSubtask}
           onToggleSubtask={actions.toggleSubtask}
